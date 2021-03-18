@@ -22,7 +22,7 @@ class LoginController extends Controller
     public function login(LoginRequest $request, JWTAuth $JWTAuth)
     {
         $credentials = $request->only(['email', 'password']);
-
+        
         try {
             $token = Auth::guard()->attempt($credentials);
 
