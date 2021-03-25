@@ -23,7 +23,6 @@ class ItemController extends Controller
         }
     }
 
-
     public function index()
     {
         $items = Item::getAllItem()->get();
@@ -31,6 +30,23 @@ class ItemController extends Controller
         return response()->json([
             'statusCode' => 200,
             'message' => trans('item.success'),
+            'data' => $items
+        ], 200);
+    }
+
+    public function indexOut(Request $request)
+    {
+        
+        $search = $request->query('search');
+        $items = ItemFlow::getByType('out');
+        
+        if($search){
+            $items->search($search);
+        }
+        $items = $items->get();
+        return response()->json([
+            'statusCode' => 200,
+            'message' => trans('itemFlow.success'),
             'data' => $items
         ], 200);
     }

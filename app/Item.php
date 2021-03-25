@@ -14,15 +14,19 @@ class Item extends Model
         'name', 'amount', 'photo'
     ];
 
+    protected $hidden = [
+        'created_date', 'updated_date',
+    ];
+
     protected $casts = [
         'quantity' => 'integer',
-        'photo' => 'string',
     ];
+
     
     public function getPhotoAttribute($value)
-{
-	return $value ?? '';
-}
+    {
+        return $value ?? '';
+    }
 
     public function scopeGetAllItem($query){
         return $query->select(

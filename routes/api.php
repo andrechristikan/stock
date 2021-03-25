@@ -19,6 +19,7 @@ $api->version('v1', function (Router $api) {
         $api->group(['prefix' => 'item'], function(Router $api) {
             $api->get('', 'App\\Api\\V1\\Controllers\\ItemController@index');
             $api->post('in', 'App\\Api\\V1\\Controllers\\ItemController@in');
+            $api->get('out', 'App\\Api\\V1\\Controllers\\ItemController@indexOut');
             $api->patch('out/{id}', 'App\\Api\\V1\\Controllers\\ItemController@out');
             $api->delete('destroy/{id}', 'App\\Api\\V1\\Controllers\\ItemController@destroy');
             $api->put('update/{id}', 'App\\Api\\V1\\Controllers\\ItemController@update');
