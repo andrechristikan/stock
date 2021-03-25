@@ -17,46 +17,67 @@ class DatabaseSeeder extends Seeder
     {
         
 
+        DB::table('roles')->insert([
+            'id' => 1,
+            'name' => 'user',
+            'created_at' => new DateTime(),
+            'updated_at' => new DateTime()
+        ]);
+
+        DB::table('roles')->insert([
+            'id' => 2,
+            'name' => 'admin',
+            'created_at' => new DateTime(),
+            'updated_at' => new DateTime()
+        ]);
+
         DB::table('users')->insert([
             'id' => 1,
+            'role_id' => 1,
             'name' => 'User',
             'email' => 'user@gmail.com',
             'password' => Hash::make('123123'),
-            'role' => 1
+            'created_at' => new DateTime(),
+            'updated_at' => new DateTime()
         ]);
 
         DB::table('users')->insert([
             'id' => 2,
+            'role_id' => 2,
             'name' => 'Admin',
             'email' => 'admin@gmail.com',
             'password' => Hash::make('123123'),
-            'role' => 2
+            'created_at' => new DateTime(),
+            'updated_at' => new DateTime()
         ]);
 
         DB::table('items')->insert([
             'id' => 1,
             'name' => 'Item 1',
-            'quantity' => 15,
             'amount' => 1000,
-            'photo' => null
+            'photo' => null,
+            'created_at' => new DateTime(),
+            'updated_at' => new DateTime()
         ]);
 
 
         DB::table('items')->insert([
             'id' => 2,
             'name' => 'Item 2',
-            'quantity' => 50,
             'amount' => 500,
-            'photo' => null
+            'photo' => null,
+            'created_at' => new DateTime(),
+            'updated_at' => new DateTime()
         ]);
-
 
         DB::table('item_flows')->insert([
             'id' => 1,
             'user_id' => 1,
             'item_id' => 1,
             'quantity' => 15,
-            'type' => 1,
+            'type' => 'in',
+            'created_at' => new DateTime(),
+            'updated_at' => new DateTime()
         ]);
 
         DB::table('item_flows')->insert([
@@ -64,7 +85,9 @@ class DatabaseSeeder extends Seeder
             'user_id' => 1,
             'item_id' => 2,
             'quantity' => 20,
-            'type' => 1,
+            'type' => 'in',
+            'created_at' => new DateTime(),
+            'updated_at' => new DateTime()
         ]);
 
     }

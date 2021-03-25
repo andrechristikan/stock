@@ -17,18 +17,19 @@ class CreateItemFlowsTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('item_id');
+            $table->string('type');
+            $table->integer('quantity');
+
             $table->foreign('user_id')
                 ->references('id')
                 ->on('users')
                 ->onUpdate('cascade')
-                ->onDelete('cascade');
+                ->onDelete('restrict');
             $table->foreign('item_id')
                 ->references('id')
                 ->on('items')
                 ->onUpdate('cascade')
-                ->onDelete('cascade');
-            $table->integer('quantity');
-            $table->unsignedBigInteger('type');
+                ->onDelete('restrict');
             $table->timestamps();
         });
     }
