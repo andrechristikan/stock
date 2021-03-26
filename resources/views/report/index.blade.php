@@ -43,6 +43,7 @@
             <th>Jumlah barang</th>
             <th>Tipe</th>
             <th>Harga barang</th>
+            <th>Tanggal</th>
           </tr>
         </thead>
         <tbody>
@@ -53,6 +54,7 @@
               <td>{{ $value->quantity }} unit</td>
               <td>{{ $value->type }}</td>
               <td>Rp. {{ $value->amount }}</td>
+              <td>{{ $value->created_at }}</td>
             </tr>
           @endforeach
         </tbody>
