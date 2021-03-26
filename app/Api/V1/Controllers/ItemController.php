@@ -257,7 +257,7 @@ class ItemController extends Controller
         Storage::disk('public')->put($link, $img);
 
         $item->photo = 'storage/'.$link;
-        if(!$ItemFlow->save()){
+        if(!$item->save()){
             throw new HttpException(trans('http.internal-server-error'));
         }
 
