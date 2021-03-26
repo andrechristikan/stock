@@ -22,10 +22,6 @@ class ReportController extends Controller
         $end_date = date($to) ?? date();
         $items = ItemFlow::joinItem();
 
-        if(!$type){
-            throw new BadRequestHttpException(trans('item-flow.type-null'));
-        }
-
         if(in_array("in", $type)){
             $items->getByType('in');
         }
