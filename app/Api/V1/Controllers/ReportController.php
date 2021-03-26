@@ -5,6 +5,8 @@ namespace App\Api\V1\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\ItemFlow;
+use Storage;
+use PDF;
 
 class ReportController extends Controller
 {
@@ -29,15 +31,37 @@ class ReportController extends Controller
         }
 
         $items = $items->inDateRange($start_date, $end_date)->get();
-        return response()->json([
-            'statusCode' => 200,
-            'message' => trans('report.success'),
-            'data' => [
-                'start_date'=> $start_date,
-                'end_date'=> $end_date,
-                'type'=> $type,
-                'items' => $items
-            ]
-        ]);
+        $data = [
+            'start_date'=> $start_date,
+            'end_date'=> $end_date,
+            'type'=> $request->query('type'),
+            'items' => $items
+        ];
+
+        $headers = [
+            'Content-Type','application/pdf'
+        ];
+
+        return $this->createPdf($data);
+    }
+
+    private function createPdf($data){
+
+        $start_date = $data['start_date'];
+        $end_date = $data['end_date'];
+        $type = $data['type'];
+        $items = $data['items'];
+
+        $pdf = PDF::loadView(
+            'report.index', 
+            compact(
+                'start_date', 
+                'end_date', 
+                'type',
+                'items'
+            )
+        );
+        $milliseconds = round(microtime(true) * 1000);
+        return $pdf->download($milliseconds.'.pdf');
     }
 }

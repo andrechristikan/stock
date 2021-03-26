@@ -28,6 +28,6 @@ class RefreshController extends Controller
                 'token' => $token,
                 'expires_in' => Auth::guard()->factory()->getTTL() * 60
             ]
-        ]);
+        ], 200);
     }
 }

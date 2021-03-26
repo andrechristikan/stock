@@ -16,6 +16,6 @@ class RoleController extends Controller
             'statusCode' => 200,
             'message' => trans('role.success'),
             'data' => $role
-        ]);
+        ], 200);
     }
 }

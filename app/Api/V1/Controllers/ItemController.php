@@ -15,16 +15,15 @@ use Illuminate\Http\Request;
 class ItemController extends Controller
 {
 
-    public function __construct()
+
+    public function index()
     {
+
         $user = Auth::guard()->user();
         if($user->role_id != 1){
             throw new UnauthorizedHttpException(trans('http.unauthorized'));
         }
-    }
 
-    public function index()
-    {
         $items = Item::getAllItem()->get();
 
         return response()->json([
@@ -36,6 +35,11 @@ class ItemController extends Controller
 
     public function indexOut(Request $request)
     {
+
+        $user = Auth::guard()->user();
+        if($user->role_id != 1){
+            throw new UnauthorizedHttpException(trans('http.unauthorized'));
+        }
         
         $search = $request->query('search');
         $items = ItemFlow::joinItem()->getByType('out');
@@ -53,6 +57,11 @@ class ItemController extends Controller
 
     public function show($id){
 
+        $user = Auth::guard()->user();
+        if($user->role_id != 1){
+            throw new UnauthorizedHttpException(trans('http.unauthorized'));
+        }
+
         $item = Item::getOneItemById($id)->first();
         if(!$item){
             throw new NotFoundHttpException(trans('http.not-found'));
@@ -67,6 +76,11 @@ class ItemController extends Controller
     }
 
     public function in(Request $request){
+
+        $user = Auth::guard()->user();
+        if($user->role_id != 1){
+            throw new UnauthorizedHttpException(trans('http.unauthorized'));
+        }
 
         $request_body = $request->only([
             'name', 
@@ -104,17 +118,22 @@ class ItemController extends Controller
         DB::commit();
 
         return response()->json([
-            'statusCode' => 200,
+            'statusCode' => 201,
             'message' => trans('item.store'),
             'data' => [
                 "id" => $item->id
             ]
-        ], 200);
+        ], 201);
 
     }
 
 
     public function destroy($id){
+
+        $user = Auth::guard()->user();
+        if($user->role_id != 1){
+            throw new UnauthorizedHttpException(trans('http.unauthorized'));
+        }
 
         $item = Item::getOneItemById($id)->first();
         if(!$item){
@@ -143,6 +162,11 @@ class ItemController extends Controller
 
 
     public function out(Request $request, $id){
+
+        $user = Auth::guard()->user();
+        if($user->role_id != 1){
+            throw new UnauthorizedHttpException(trans('http.unauthorized'));
+        }
 
         $request_body = $request->only([
             'quantity'
@@ -184,6 +208,11 @@ class ItemController extends Controller
 
     public function update(Request $request, $id){
 
+        $user = Auth::guard()->user();
+        if($user->role_id != 1){
+            throw new UnauthorizedHttpException(trans('http.unauthorized'));
+        }
+        
         $request_body = $request->only([
             'name',
             'amount',
