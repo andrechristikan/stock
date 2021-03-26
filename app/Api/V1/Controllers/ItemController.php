@@ -37,7 +37,6 @@ class ItemController extends Controller
 
     public function indexOut(Request $request)
     {
-
         $user = Auth::guard()->user();
         if($user->role_id != 1){
             throw new UnauthorizedHttpException(trans('http.unauthorized'));
@@ -97,6 +96,11 @@ class ItemController extends Controller
             'amount' => $request_body['amount'],
         ]);
 
+        if(!$item->save()){
+            DB::rollBack();
+            throw new HttpException(trans('http.internal-server-error'));
+        }
+
         if ($request->hasFile('photo')) {
             $image      = $request->file('photo');
             $fileName   = time() . '.' . $image->getClientOriginalExtension();
@@ -114,11 +118,11 @@ class ItemController extends Controller
             $item->photo = 'storage/'.$link;
         }
 
-
         if(!$item->save()){
             DB::rollBack();
             throw new HttpException(trans('http.internal-server-error'));
         }
+
 
         $user = Auth::guard()->user();
         $ItemFlow = new ItemFlow([
