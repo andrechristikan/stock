@@ -44,7 +44,7 @@ class ItemFlow extends Model
                 'items.amount as amount',
                 'item_flows.type as type',
                 'item_flows.quantity as quantity',
-                'item_flows.created_at as created_at',
+                'item_flows.created_at as created_at'
             )
             ->join('items', 'item_flows.item_id' ,'=', 'items.id');
     }
