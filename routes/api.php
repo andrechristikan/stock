@@ -31,6 +31,7 @@ $api->version('v1', function (Router $api) {
             $api->patch('out/{id}', 'App\\Api\\V1\\Controllers\\ItemController@out');
             $api->delete('destroy/{id}', 'App\\Api\\V1\\Controllers\\ItemController@destroy');
             $api->put('update/{id}', 'App\\Api\\V1\\Controllers\\ItemController@update');
+            $api->post('update-photo/{id}', 'App\\Api\\V1\\Controllers\\ItemController@updateItemPhoto');
             $api->get('{id}', 'App\\Api\\V1\\Controllers\\ItemController@show');
         });
     });

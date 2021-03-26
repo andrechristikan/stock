@@ -11,6 +11,8 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Illuminate\Http\Request;
+use Image;
+use Storage;
 
 class ItemController extends Controller
 {
@@ -85,7 +87,6 @@ class ItemController extends Controller
         $request_body = $request->only([
             'name', 
             'amount', 
-            // 'photo',
             'quantity'
         ]);
 
@@ -93,9 +94,26 @@ class ItemController extends Controller
 
         $item = new Item([
             'name' => $request_body['name'],
-            'amount' => $request_body['amount'], 
-            'photo' => null,
+            'amount' => $request_body['amount'],
         ]);
+
+        if ($request->hasFile('photo')) {
+            $image      = $request->file('photo');
+            $fileName   = time() . '.' . $image->getClientOriginalExtension();
+
+            $img = Image::make($image->getRealPath());
+            $img->resize(120, 120, function ($constraint) {
+                $constraint->aspectRatio();                 
+            });
+
+            $img->stream(); // <-- Key point
+
+            $link = 'images/'.$item->id.'/'.$fileName;
+            Storage::disk('public')->put($link, $img);
+
+            $item->photo = 'storage/'.$link;
+        }
+
 
         if(!$item->save()){
             DB::rollBack();
@@ -205,6 +223,43 @@ class ItemController extends Controller
         ], 200);
     }
 
+    public function updateItemPhoto(Request $request, $id){
+
+        $user = Auth::guard()->user();
+        if($user->role_id != 1){
+            throw new UnauthorizedHttpException(trans('http.unauthorized'));
+        }
+
+        if (!$request->hasFile('photo')) {
+            throw new BadRequestHttpException(trans('item.photo-null'));
+        }
+
+        $item = Item::getOneItemById($id)->first();
+        if(!$item){
+            throw new NotFoundHttpException(trans('http.not-found'));
+        }
+
+        $image      = $request->file('photo');
+        $fileName   = time() . '.' . $image->getClientOriginalExtension();
+
+        $img = Image::make($image->getRealPath());
+        $img->resize(120, 120, function ($constraint) {
+            $constraint->aspectRatio();                 
+        });
+
+        $img->stream(); // <-- Key point
+
+        $link = 'images/'.$item->id.'/'.$fileName;
+        Storage::disk('public')->put($link, $img);
+
+        $item->photo = 'storage/'.$link;
+        
+        return response()->json([
+            'statusCode' => 200,
+            'message' => trans('item.update'),
+        ], 200);
+    }
+
 
     public function update(Request $request, $id){
 
@@ -216,7 +271,6 @@ class ItemController extends Controller
         $request_body = $request->only([
             'name',
             'amount',
-            // 'photo'
         ]);
 
         $item = Item::getOneItemById($id)->first();
@@ -226,6 +280,7 @@ class ItemController extends Controller
 
         $item->name = $request_body['name'];
         $item->amount = $request_body['amount'];
+
         if(!$item->save()){
             throw new HttpException(trans('http.internal-server-error'));
         }
