@@ -41,6 +41,7 @@
             <th>No</th>
             <th>Nama barang</th>
             <th>Jumlah barang</th>
+            <th>Tipe</th>
             <th>Harga barang</th>
           </tr>
         </thead>
@@ -50,6 +51,7 @@
               <td>{{ $index + 1 }}</td>
               <td>{{ $value->name }}</td>
               <td>{{ $value->quantity }} unit</td>
+              <td>{{ $value->type }}</td>
               <td>Rp. {{ $value->amount }}</td>
             </tr>
           @endforeach
