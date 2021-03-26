@@ -22,6 +22,10 @@ class ReportController extends Controller
         $end_date = date($to) ?? date();
         $items = ItemFlow::joinItem();
 
+        if(!$type){
+            throw new BadRequestHttpException(trans('item-flow.type-null'));
+        }
+
         if(in_array("in", $type)){
             $items->getByType('in');
         }
@@ -34,6 +38,11 @@ class ReportController extends Controller
             ->inDateRange($start_date, $end_date)
             ->sortDescByCreatedAt()
             ->get();
+
+        if(!$items && count($items) <= 0){
+            throw new BadRequestHttpException(trans('item-flow.empty'));
+        }
+
         $data = [
             'start_date'=> $start_date,
             'end_date'=> $end_date,
