@@ -257,7 +257,10 @@ class ItemController extends Controller
         Storage::disk('public')->put($link, $img);
 
         $item->photo = 'storage/'.$link;
-        
+        if(!$ItemFlow->save()){
+            throw new HttpException(trans('http.internal-server-error'));
+        }
+
         return response()->json([
             'statusCode' => 200,
             'message' => trans('item.update'),
