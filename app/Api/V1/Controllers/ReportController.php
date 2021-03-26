@@ -30,7 +30,10 @@ class ReportController extends Controller
             $items->getByType('out');
         }
 
-        $items = $items->inDateRange($start_date, $end_date)->get();
+        $items = $items
+            ->inDateRange($start_date, $end_date)
+            ->sortDescByCreatedAt()
+            ->get();
         $data = [
             'start_date'=> $start_date,
             'end_date'=> $end_date,

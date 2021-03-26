@@ -52,4 +52,11 @@ class ItemFlow extends Model
     public function scopeInDateRange($query, $from, $to){
         return $query->whereBetween('item_flows.created_at', [$from, $to]);
     }
+
+    public function scopeSortDescByCreatedAt($query){
+        return $query->sortaBy([
+            'item_flows.created_at' => 'desc'
+        ]);
+    }
+
 }
