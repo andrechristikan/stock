@@ -54,7 +54,7 @@ class ItemFlow extends Model
     }
 
     public function scopeSortDescByCreatedAt($query){
-        return $query->sortaBy([
+        return $query->sortBy([
             'item_flows.created_at' => 'desc'
         ]);
     }
