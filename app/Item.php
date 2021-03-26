@@ -15,7 +15,7 @@ class Item extends Model
     ];
 
     protected $hidden = [
-        'created_date', 'updated_date',
+        'created_at', 'updated_at',
     ];
 
     protected $casts = [

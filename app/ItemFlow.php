@@ -13,7 +13,7 @@ class ItemFlow extends Model
     ];
 
     protected $hidden = [
-        'created_date', 'updated_date',
+        'updated_at',
     ];
 
     public function scopeSearch($query, $search){
@@ -31,17 +31,25 @@ class ItemFlow extends Model
         return $query->where('item_flows.item_id','=', $item_id);
     }
 
-
     public function scopeGetByType($query, $type){
+        return $query->orWhere('item_flows.type','=', $type);
+    }
+
+    public function scopeJoinItem($query){
         return $query
             ->select(
                 'item_flows.id as id',
                 'item_flows.item_id as item_id',
                 'items.name as name',
                 'items.amount as amount',
-                'item_flows.quantity as quantity'
+                'item_flows.type as type',
+                'item_flows.quantity as quantity',
+                'item_flows.created_at as created_at',
             )
-            ->join('items', 'item_flows.item_id' ,'=', 'items.id')
-            ->where('item_flows.type','=', $type);
+            ->join('items', 'item_flows.item_id' ,'=', 'items.id');
+    }
+
+    public function scopeInDateRange($query, $from, $to){
+        return $query->whereBetween('item_flows.created_at', [$from, $to]);
     }
 }

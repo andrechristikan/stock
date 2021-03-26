@@ -38,7 +38,7 @@ class ItemController extends Controller
     {
         
         $search = $request->query('search');
-        $items = ItemFlow::getByType('out');
+        $items = ItemFlow::joinItem()->getByType('out');
         
         if($search){
             $items->search($search);

@@ -12,8 +12,16 @@ $api->version('v1', function (Router $api) {
 
     $api->group(['middleware' => 'jwt.auth'], function(Router $api) {
 
+
+        $api->post('logout', 'App\\Api\\V1\\Controllers\\LogoutController@logout');
+        $api->post('refresh', 'App\\Api\\V1\\Controllers\\RefreshController@refresh');
+
         $api->group(['prefix' => 'user'], function(Router $api) {
             $api->get('profile', 'App\\Api\\V1\\Controllers\\UserController@profile');
+        });
+
+        $api->group(['prefix' => 'report'], function(Router $api) {
+            $api->get('{start}/{end}', 'App\\Api\\V1\\Controllers\\ReportController@index');
         });
 
         $api->group(['prefix' => 'item'], function(Router $api) {
@@ -25,18 +33,6 @@ $api->version('v1', function (Router $api) {
             $api->put('update/{id}', 'App\\Api\\V1\\Controllers\\ItemController@update');
             $api->get('{id}', 'App\\Api\\V1\\Controllers\\ItemController@show');
         });
-
-        $api->post('logout', 'App\\Api\\V1\\Controllers\\LogoutController@logout');
-        $api->post('refresh', 'App\\Api\\V1\\Controllers\\RefreshController@refresh');
-
-        $api->get('refresh', [
-            'middleware' => 'jwt.refresh',
-            function() {
-                return response()->json([
-                    'message' => 'By accessing this endpoint, you can refresh your access token at each request. Check out this response headers!'
-                ]);
-            }
-        ]);
     });
 
     $api->get('hello', function() {
