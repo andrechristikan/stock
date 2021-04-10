@@ -9,6 +9,7 @@ use App\Api\V1\Requests\LoginRequest;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Auth;
+use App\User;
 
 class LoginController extends Controller
 {
@@ -34,11 +35,14 @@ class LoginController extends Controller
             throw new HttpException(500);
         }
 
+        $user = User::findByEmail($credentials['email'])->first();
+
         return response()
             ->json([
                 'statusCode' => 200,
                 'message' => trans('login.success'),
                 'data'=> [
+                    'name' => $user->name,
                     'token' => $token,
                     'expires_in' => Auth::guard()->factory()->getTTL() * 60
                 ]

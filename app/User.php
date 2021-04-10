@@ -60,4 +60,8 @@ class User extends Authenticatable implements JWTSubject
     {
         return [];
     }
+
+    public function scopeFindByEmail($query, $email){
+        return $query->where('email', '=', $email);
+    }
 }
