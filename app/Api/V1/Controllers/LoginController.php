@@ -43,6 +43,7 @@ class LoginController extends Controller
                 'message' => trans('login.success'),
                 'data'=> [
                     'name' => $user->name,
+                    'role_id' => $user->role_id,
                     'token' => $token,
                     'expires_in' => Auth::guard()->factory()->getTTL() * 60
                 ]
