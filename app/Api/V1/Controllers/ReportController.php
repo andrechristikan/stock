@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\ItemFlow;
 use Storage;
 use PDF;
+use Auth;
 
 class ReportController extends Controller
 {
@@ -17,6 +18,7 @@ class ReportController extends Controller
      */
     public function index(Request $request, $from, $to)
     {
+        $user = Auth::guard()->user();
         $type = $request->query('type') ? explode(',',$request->query('type')) : [ 'in' ];
         $start_date = date($from) ?? date();
         $end_date = date($to) ?? date();
@@ -50,7 +52,18 @@ class ReportController extends Controller
             'Content-Type','application/pdf'
         ];
 
-        return $this->createPdf($data);
+        $pdf = $this->createPdf($data);
+        $fileName   = time() . '.pdf';
+        $link = 'pdf/'.$user->id.'/'.$fileName;
+        Storage::disk('public')->put($link, $pdf);
+
+        return response()->json([
+            'statusCode' => 200,
+            'message' => trans('report.create'),
+            'data' => [
+                "link" =>  $link
+            ]
+        ], 200);
     }
 
     private function createPdf($data){
