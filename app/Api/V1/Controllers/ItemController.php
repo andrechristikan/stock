@@ -101,7 +101,7 @@ class ItemController extends Controller
             throw new HttpException(trans('http.internal-server-error'));
         }
 
-        if ($request->hasFile('photo')) {
+        if ($request->photo && $request->hasFile('photo')) {
             $image      = $request->file('photo');
             $fileName   = time() . '.' . $image->getClientOriginalExtension();
 
