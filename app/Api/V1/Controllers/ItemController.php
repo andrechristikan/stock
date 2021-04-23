@@ -83,17 +83,11 @@ class ItemController extends Controller
             throw new UnauthorizedHttpException(trans('http.unauthorized'));
         }
 
-        $request_body = $request->only([
-            'name', 
-            'amount', 
-            'quantity'
-        ]);
-
         DB::beginTransaction();
 
         $item = new Item([
-            'name' => $request_body['name'],
-            'amount' => $request_body['amount'],
+            'name' => $request->name,
+            'amount' => $request->amount,
         ]);
 
         if(!$item->save()){
@@ -129,7 +123,7 @@ class ItemController extends Controller
             'item_id'=> $item->id,
             'user_id'=> $user->id,
             'type'=> 'in',
-            'quantity'=> $request_body['quantity'],
+            'quantity'=> $request->quantity,
         ]);
 
         if(!$ItemFlow->save()){
@@ -190,11 +184,7 @@ class ItemController extends Controller
             throw new UnauthorizedHttpException(trans('http.unauthorized'));
         }
 
-        $request_body = $request->only([
-            'quantity'
-        ]);
-
-        $quantity = $request_body['quantity'];
+        $quantity = $request->quantity;
         if($quantity <= 0){
             throw new BadRequestHttpException(trans('item.quantity-must-more-than-one'));
         }
@@ -275,18 +265,13 @@ class ItemController extends Controller
             throw new UnauthorizedHttpException(trans('http.unauthorized'));
         }
         
-        $request_body = $request->only([
-            'name',
-            'amount',
-        ]);
-
         $item = Item::getOneItemById($id)->first();
         if(!$item){
             throw new NotFoundHttpException(trans('http.not-found'));
         }
 
-        $item->name = $request_body['name'];
-        $item->amount = $request_body['amount'];
+        $item->name = $request->name;
+        $item->amount = $request->amount;
 
         if(!$item->save()){
             throw new HttpException(trans('http.internal-server-error'));
