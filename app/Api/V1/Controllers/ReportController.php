@@ -61,7 +61,7 @@ class ReportController extends Controller
             'statusCode' => 200,
             'message' => trans('report.create'),
             'data' => [
-                "link" =>  $link
+                "link" =>  'storage/'.$link
             ]
         ], 200);
     }
