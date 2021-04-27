@@ -33,7 +33,7 @@ class ReportController extends Controller
         }
 
         $items = $items
-            ->inDateRange($start_date, $end_date)
+            ->inDateRange($start_date, date('Y-m-d', strtotime($end_date . ' +1 day')))
             ->sortDescByCreatedAt()
             ->get();
 
