@@ -8,6 +8,7 @@ use Tymon\JWTAuth\JWTAuth;
 use App\Http\Controllers\Controller;
 use App\Api\V1\Requests\SignUpRequest;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Auth;
 
 class SignUpController extends Controller
@@ -21,6 +22,11 @@ class SignUpController extends Controller
             'email',
             'password'
         ]);
+
+        $emailCheck = User::findByEmail($request_body['email'])->first();
+        if($emailCheck){
+            throw new BadRequestHttpException('Email sudah digunakan');
+        }
         
         $user = new User($request_body);
         if(!$user->save()) {

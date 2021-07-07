@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Api\V1\Requests\LoginRequest;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Auth;
 use App\User;
 
@@ -23,19 +24,23 @@ class LoginController extends Controller
     public function login(LoginRequest $request, JWTAuth $JWTAuth)
     {
         $credentials = $request->only(['email', 'password']);
+        $user = User::findByEmail($credentials['email'])->first();
         
+        if(!$user){
+            throw new BadRequestHttpException('Email tidak ada di database');
+        }
+
         try {
             $token = Auth::guard()->attempt($credentials);
 
             if(!$token) {
-                throw new AccessDeniedHttpException();
+                throw new BadRequestHttpException('Password yang dimasukan salah');
             }
 
         } catch (JWTException $e) {
             throw new HttpException(500);
         }
 
-        $user = User::findByEmail($credentials['email'])->first();
 
         return response()
             ->json([
