@@ -40,13 +40,19 @@ class ItemFlow extends Model
             ->select(
                 'item_flows.id as id',
                 'item_flows.item_id as item_id',
+                'items.rack_id as rack_id',
+                'racks.name as rack_name',
+                'racks.warehouse_id as warehouse_id',
+                'warehouses.name as warehouse_name',
                 'items.name as name',
                 'items.amount as amount',
                 'item_flows.type as type',
                 'item_flows.quantity as quantity',
                 'item_flows.created_at as created_at'
             )
-            ->join('items', 'item_flows.item_id' ,'=', 'items.id');
+            ->join('items', 'item_flows.item_id' ,'=', 'items.id')
+            ->join('racks', 'items.rack_id', '=', 'racks.id')
+            ->join('warehouses', 'racks.warehouse_id', '=', 'warehouses.id');
     }
 
     public function scopeInDateRange($query, $from, $to){

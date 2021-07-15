@@ -15,9 +15,16 @@ class CreateItemsTable extends Migration
     {
         Schema::create('items', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->unsignedBigInteger('rack_id');
             $table->string('name');
             $table->integer('amount');
             $table->string('photo')->nullable();
+            
+            $table->foreign('rack_id')
+                ->references('id')
+                ->on('racks')
+                ->onUpdate('cascade')
+                ->onDelete('restrict');
             $table->timestamps();
         });
     }

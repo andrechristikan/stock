@@ -17,7 +17,7 @@ class CreateItemFlowsTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('item_id');
-            $table->string('type');
+            $table->string('type'); // in out defect
             $table->integer('quantity');
 
             $table->foreign('user_id')

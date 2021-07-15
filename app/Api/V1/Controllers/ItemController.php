@@ -17,8 +17,7 @@ use Storage;
 class ItemController extends Controller
 {
 
-
-    public function index()
+    public function index(Request $request)
     {
 
         $user = Auth::guard()->user();
@@ -26,8 +25,24 @@ class ItemController extends Controller
             throw new UnauthorizedHttpException(trans('http.unauthorized'));
         }
 
-        $items = Item::getAllItem()->get();
+        $search = $request->query('search');
+        $rack_id = $request->query('rack_id');
+        $warehouse_id = $request->query('warehouse_id');
+        $items = Item::getAllItem();
 
+        if($search){
+            $items->search($search);
+        }
+
+        if($rack_id){
+            $items->getByRackId($rack_id);
+        }
+
+        if($warehouse_id){
+            $items->getByWarehouseId($warehouse_id);
+        }
+
+        $items = $items->get();
         return response()->json([
             'statusCode' => 200,
             'message' => trans('item.success'),
@@ -48,6 +63,7 @@ class ItemController extends Controller
         if($search){
             $items->search($search);
         }
+
         $items = $items->get();
         return response()->json([
             'statusCode' => 200,
@@ -56,7 +72,29 @@ class ItemController extends Controller
         ], 200);
     }
 
-    public function show($id){
+    public function indexDefect(Request $request)
+    {
+        $user = Auth::guard()->user();
+        if($user->role_id != 1){
+            throw new UnauthorizedHttpException(trans('http.unauthorized'));
+        }
+        
+        $search = $request->query('search');
+        $items = ItemFlow::joinItem()->getByType('defect');
+        if($search){
+            $items->search($search);
+        }
+
+        $items = $items->get();
+        return response()->json([
+            'statusCode' => 200,
+            'message' => trans('itemFlow.success'),
+            'data' => $items
+        ], 200);
+    }
+
+    public function show($id)
+    {
 
         $user = Auth::guard()->user();
         if($user->role_id != 1){
@@ -76,7 +114,8 @@ class ItemController extends Controller
 
     }
 
-    public function in(Request $request){
+    public function in(Request $request)
+    {
 
         $user = Auth::guard()->user();
         if($user->role_id != 1){
@@ -143,8 +182,8 @@ class ItemController extends Controller
 
     }
 
-
-    public function destroy($id){
+    public function destroy($id)
+    {
 
         $user = Auth::guard()->user();
         if($user->role_id != 1){
@@ -156,18 +195,8 @@ class ItemController extends Controller
             throw new NotFoundHttpException(trans('http.not-found'));
         }
 
-        $user = Auth::guard()->user();
-        $quantityOfItem = ItemFlow::getByItemId($id)->sum('quantity');
-        $ItemFlow = new ItemFlow([
-            'item_id'=> $item->id,
-            'user_id'=> $user->id,
-            'type'=> 'out',
-            'quantity'=> -$quantityOfItem,
-        ]);
-
-        if(!$ItemFlow->save()){
-            throw new HttpException(trans('http.internal-server-error'));
-        }
+        ItemFlow::getByItemId($id)->delete();
+        Item::find($id)->delete();
 
         return response()->json([
             'statusCode' => 200,
@@ -176,8 +205,8 @@ class ItemController extends Controller
 
     }
 
-
-    public function out(Request $request, $id){
+    public function out(Request $request, $id)
+    {
 
         $user = Auth::guard()->user();
         if($user->role_id != 1){
@@ -217,7 +246,49 @@ class ItemController extends Controller
         ], 200);
     }
 
-    public function updateItemPhoto(Request $request, $id){
+    public function defect(Request $request, $id)
+    {
+
+        $user = Auth::guard()->user();
+        if($user->role_id != 1){
+            throw new UnauthorizedHttpException(trans('http.unauthorized'));
+        }
+
+        $quantity = $request->quantity;
+        if($quantity <= 0){
+            throw new BadRequestHttpException(trans('item.quantity-must-more-than-one'));
+        }
+
+        $item = Item::getOneItemById($id)->first();
+        if(!$item){
+            throw new NotFoundHttpException(trans('http.not-found'));
+        }
+
+        $user = Auth::guard()->user();
+        $quantityOfItem = abs(ItemFlow::getByItemId($id)->sum('quantity'));
+        if($quantityOfItem < $quantity){
+            throw new BadRequestHttpException(trans('item.quantity-out-more-than-stock'));
+        }
+
+        $ItemFlow = new ItemFlow([
+            'item_id'=> $item->id,
+            'user_id'=> $user->id,
+            'type'=> 'defect',
+            'quantity'=> -$quantity,
+        ]);
+
+        if(!$ItemFlow->save()){
+            throw new HttpException(trans('http.internal-server-error'));
+        }
+
+        return response()->json([
+            'statusCode' => 200,
+            'message' => trans('item.defect'),
+        ], 200);
+    }
+
+    public function updateItemPhoto(Request $request, $id)
+    {
 
         $user = Auth::guard()->user();
         if($user->role_id != 1){
@@ -257,8 +328,8 @@ class ItemController extends Controller
         ], 200);
     }
 
-
-    public function update(Request $request, $id){
+    public function update(Request $request, $id)
+    {
 
         $user = Auth::guard()->user();
         if($user->role_id != 1){

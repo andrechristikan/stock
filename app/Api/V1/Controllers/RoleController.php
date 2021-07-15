@@ -7,7 +7,6 @@ use App\Role;
 class RoleController extends Controller
 {
 
-
     public function index()
     {
         $role = Role::all();
