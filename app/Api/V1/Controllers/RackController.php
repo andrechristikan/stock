@@ -11,9 +11,16 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 class RackController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
-        $rack = Rack::getAll()->get();
+        $rack = Rack::getAll();
+        
+        $warehouse_id = $request->warehouse_id;
+        if($warehouse_id){
+            $rack->getByWarehouseId($warehouse_id);
+        }
+        
+        $rack = $rack->get();
 
         return response()->json([
             'statusCode' => 200,

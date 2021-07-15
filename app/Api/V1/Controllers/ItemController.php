@@ -125,6 +125,7 @@ class ItemController extends Controller
         DB::beginTransaction();
 
         $item = new Item([
+            'rack_id' => $request->rack_id,
             'name' => $request->name,
             'amount' => $request->amount,
         ]);
