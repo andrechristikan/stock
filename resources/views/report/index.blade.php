@@ -39,6 +39,8 @@
         <thead>
           <tr>
             <th>No</th>
+            <th>Gudang</th>
+            <th>Rak</th>
             <th>Nama barang</th>
             <th>Jumlah barang</th>
             <th>Tipe</th>
@@ -50,6 +52,8 @@
           @foreach ($items as $index => $value)
             <tr>
               <td>{{ $index + 1 }}</td>
+              <td>{{ $value->warehouse_name }}</td>
+              <td>{{ $value->rack_name }}</td>
               <td>{{ $value->name }}</td>
               <td>{{ $value->quantity }} unit</td>
               <td>{{ $value->type }}</td>

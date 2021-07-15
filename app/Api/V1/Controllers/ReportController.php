@@ -32,6 +32,10 @@ class ReportController extends Controller
             $items->getByType('out');
         }
 
+        if(in_array("defect", $type)){
+            $items->getByType('defect');
+        }
+
         $items = $items
             ->inDateRange($start_date, date('Y-m-d', strtotime($end_date . ' +1 day')))
             ->sortDescByCreatedAt()
