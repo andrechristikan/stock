@@ -11,7 +11,7 @@ class Item extends Model
     protected $table = 'items';
 
     protected $fillable = [
-        'name', 'amount', 'photo', 'rack_id'
+        'name', 'amount', 'photo', 'rack_id', 'alias_id'
     ];
 
     protected $hidden = [
@@ -40,6 +40,7 @@ class Item extends Model
             'racks.name as rack_name',
             'racks.warehouse_id as warehouse_id',
             'warehouses.name as warehouse_name',
+            'items.alias_id as alias_id',
             'items.name as name',
             'items.amount as amount',
             'items.photo as photo',
@@ -58,6 +59,8 @@ class Item extends Model
             '%'.strtolower($search).'%'
         ])->orWhereRaw('LOWER(`warehouses`.`name`) LIKE ?', [
             '%'.strtolower($search).'%'
+        ])->orWhereRaw('LOWER(`items`.`alias_id`) LIKE ?', [
+            '%'.strtolower($search).'%'
         ]);
     }
 
@@ -68,6 +71,7 @@ class Item extends Model
             'racks.name as rack_name',
             'racks.warehouse_id as warehouse_id',
             'warehouses.name as warehouse_name',
+            'items.alias_id as alias_id',
             'items.name as name',
             'items.amount as amount',
             'items.photo as photo',

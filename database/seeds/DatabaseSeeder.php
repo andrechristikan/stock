@@ -105,6 +105,7 @@ class DatabaseSeeder extends Seeder
         DB::table('items')->insert([
             'id' => 1,
             'rack_id' => 1,
+            'alias_id' => 'BR1',
             'name' => 'Item 1',
             'amount' => 1000,
             'photo' => null,
@@ -114,6 +115,7 @@ class DatabaseSeeder extends Seeder
         DB::table('items')->insert([
             'id' => 2,
             'rack_id' => 1,
+            'alias_id' => 'BR2',
             'name' => 'Item 2',
             'amount' => 500,
             'photo' => null,
@@ -123,6 +125,7 @@ class DatabaseSeeder extends Seeder
         DB::table('items')->insert([
             'id' => 3,
             'rack_id' => 4,
+            'alias_id' => 'BR3',
             'name' => 'Item 3',
             'amount' => 1500,
             'photo' => null,
@@ -132,6 +135,7 @@ class DatabaseSeeder extends Seeder
         DB::table('items')->insert([
             'id' => 4,
             'rack_id' => 5,
+            'alias_id' => 'BR4',
             'name' => 'Item 4',
             'amount' => 2000,
             'photo' => null,

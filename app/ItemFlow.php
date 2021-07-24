@@ -44,6 +44,7 @@ class ItemFlow extends Model
                 'racks.name as rack_name',
                 'racks.warehouse_id as warehouse_id',
                 'warehouses.name as warehouse_name',
+                'items.alias_id as alias_id',
                 'items.name as name',
                 'items.amount as amount',
                 'item_flows.type as type',

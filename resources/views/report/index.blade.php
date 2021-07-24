@@ -41,6 +41,7 @@
             <th>No</th>
             <th>Gudang</th>
             <th>Rak</th>
+            <th>Alias ID</th>
             <th>Nama barang</th>
             <th>Jumlah barang</th>
             <th>Tipe</th>
@@ -54,6 +55,7 @@
               <td>{{ $index + 1 }}</td>
               <td>{{ $value->warehouse_name }}</td>
               <td>{{ $value->rack_name }}</td>
+              <td>{{ $value->alias_id }}</td>
               <td>{{ $value->name }}</td>
               <td>{{ $value->quantity }} unit</td>
               <td>{{ $value->type }}</td>
