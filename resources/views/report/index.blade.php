@@ -62,9 +62,8 @@
       </table>
 
 
-      <br>
-      <br>
-
+      <span style="page-break-after: always;"></span>
+      
       <div>
         <h3>Barang Defect</h3>  
       </div>
@@ -100,6 +99,34 @@
               </tr>
             @endforeach
           @endif
+        </tbody>
+      </table>
+
+      <span style="page-break-after: always;"></span>
+
+      <div>
+        <h3>Jumlah</h3>  
+      </div>
+      <table id="tablesLiner">
+        <thead>
+          <tr>
+            <th></th>
+            <th>Jumlah</th>
+          </tr>
+        </thead>
+        <tbody>
+            <tr>
+              <td>Barang Masuk</td>
+              <td>{!! count($items_in) !!} </td>
+            </tr>
+            <tr>
+              <td>Barang Keluar</td>
+              <td>{!! count($items_out) !!} </td>
+            </tr>
+            <tr>
+              <td>Barang Defect</td>
+              <td>{!! count($items_defect) !!} </td>
+            </tr>
         </tbody>
       </table>
 

@@ -52,6 +52,12 @@ class ReportController extends Controller
             'end_date'=> $end_date,
             'type'=> $request->query('type'),
             'items' => $items,
+            'items_in' => $items->filter(function($value, $key){
+                return $value['type'] === 'in';
+            }),
+            'items_out' => $items->filter(function($value, $key){
+                return $value['type'] === 'out';
+            }),
             'items_defect' => $items_defect
         ];
 
@@ -80,6 +86,8 @@ class ReportController extends Controller
         $type = $data['type'];
         $items = $data['items'];
         $items_defect = $data['items_defect'];
+        $items_in = $data['items_in'];
+        $items_out = $data['items_out'];
 
         $pdf = PDF::loadView(
             'report.index', 
@@ -88,10 +96,14 @@ class ReportController extends Controller
                 'end_date', 
                 'type',
                 'items',
-                'items_defect'
+                'items_defect',
+                'items_in',
+                'items_out'
             )
         );
         $milliseconds = round(microtime(true) * 1000);
         return $pdf->download($milliseconds.'.pdf');
     }
+
+
 }
