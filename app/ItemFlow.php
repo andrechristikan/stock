@@ -31,8 +31,12 @@ class ItemFlow extends Model
         return $query->where('item_flows.item_id','=', $item_id);
     }
 
-    public function scopeGetByType($query, $type){
+    public function scopeOrGetByType($query, $type){
         return $query->orWhere('item_flows.type','=', $type);
+    }
+
+    public function scopeGetByType($query, $type){
+        return $query->where('item_flows.type','=', $type);
     }
 
     public function scopeJoinItem($query){

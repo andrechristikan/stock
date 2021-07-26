@@ -29,15 +29,17 @@ class ReportController extends Controller
         }
 
         if(in_array("out", $type)){
-            $items->getByType('out');
-        }
-
-        if(in_array("defect", $type)){
-            $items->getByType('defect');
+            $items->orGetByType('out');
         }
 
         $items = $items
             ->inDateRange($start_date, date('Y-m-d', strtotime($end_date . ' +1 day')))
+            ->sortDescByCreatedAt()
+            ->get();
+
+        $items_defect = ItemFlow::joinItem()
+            ->inDateRange($start_date, date('Y-m-d', strtotime($end_date . ' +1 day')))
+            ->getByType('defect')
             ->sortDescByCreatedAt()
             ->get();
 
@@ -49,7 +51,8 @@ class ReportController extends Controller
             'start_date'=> $start_date,
             'end_date'=> $end_date,
             'type'=> $request->query('type'),
-            'items' => $items
+            'items' => $items,
+            'items_defect' => $items_defect
         ];
 
         $headers = [
@@ -76,6 +79,7 @@ class ReportController extends Controller
         $end_date = $data['end_date'];
         $type = $data['type'];
         $items = $data['items'];
+        $items_defect = $data['items_defect'];
 
         $pdf = PDF::loadView(
             'report.index', 
@@ -83,7 +87,8 @@ class ReportController extends Controller
                 'start_date', 
                 'end_date', 
                 'type',
-                'items'
+                'items',
+                'items_defect'
             )
         );
         $milliseconds = round(microtime(true) * 1000);

@@ -21,13 +21,12 @@ class Item extends Model
     protected $casts = [
         'quantity' => 'integer',
     ];
-
     
     public function getPhotoAttribute($value)
     {
         return $value ?? '';
     }
-
+    
     public function getQuantityDefectAttribute($value)
     {
         return abs($value);

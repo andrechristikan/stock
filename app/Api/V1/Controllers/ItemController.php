@@ -135,6 +135,12 @@ class ItemController extends Controller
             throw new HttpException(trans('http.internal-server-error'));
         }
 
+        $item->alias_id = "BR".$item->id;
+        if(!$item->save()){
+            DB::rollBack();
+            throw new HttpException(trans('http.internal-server-error'));
+        }
+
         if ($request->photo && $request->hasFile('photo')) {
             $image      = $request->file('photo');
             $fileName   = time() . '.' . $image->getClientOriginalExtension();

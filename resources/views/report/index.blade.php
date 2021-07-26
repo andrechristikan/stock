@@ -4,38 +4,33 @@
     <meta charset="utf-8">
     <title></title>
     <style>
-      #customers {
+      #tablesLiner {
         border-collapse: collapse;
         width: 90%;
       }
 
-      #customers td,
-      #customers th {
+      #tablesLiner td,
+      #tablesLiner th {
         border: 1px solid #ddd;
         padding: 8px;
       }
 
-      .containerTanggal {
-        display: flex;
-        flex-direction: row;
-        flex-wrap: nowrap;
-        justify-content: space-between;
-        width: 90%;
-      }
     </style>
   </head>
   <body>
-    <div>
-      <div class="containerTanggal">
+    <div>    
+      <div>
         <p>Tanggal masuk: {{ $start_date }}</p>
-      </div>
-      <div class="containerTanggal">
         <p>Tanggal keluar: {{ $end_date }}</p>  
       </div>
-      <div class="containerTanggal">
+      
+      <br>
+
+      <div>
+        <h3>Barang Normal</h3>
         <p>Type: {{ $type }}</p>  
       </div>
-      <table id="customers">
+      <table id="tablesLiner">
         <thead>
           <tr>
             <th>No</th>
@@ -65,6 +60,49 @@
           @endforeach
         </tbody>
       </table>
+
+
+      <br>
+      <br>
+
+      <div>
+        <h3>Barang Defect</h3>  
+      </div>
+      <table id="tablesLiner">
+        <thead>
+          <tr>
+            <th>No</th>
+            <th>Gudang</th>
+            <th>Rak</th>
+            <th>Alias ID</th>
+            <th>Nama barang</th>
+            <th>Jumlah barang</th>
+            <th>Harga barang</th>
+            <th>Tanggal</th>
+          </tr>
+        </thead>
+        <tbody>
+          @if(count($items_defect) === 0)
+              <tr>
+                <td colspan="8">Tidak ada barang defect</td>
+              </tr>
+          @else
+            @foreach ($items_defect as $index => $value)
+              <tr>
+                <td>{{ $index + 1 }}</td>
+                <td>{{ $value->warehouse_name }}</td>
+                <td>{{ $value->rack_name }}</td>
+                <td>{{ $value->alias_id }}</td>
+                <td>{{ $value->name }}</td>
+                <td>{{ $value->quantity }} unit</td>
+                <td>Rp. {{ $value->amount }}</td>
+                <td>{{ $value->created_at }}</td>
+              </tr>
+            @endforeach
+          @endif
+        </tbody>
+      </table>
+
     </div>
   </body>
 </html>
